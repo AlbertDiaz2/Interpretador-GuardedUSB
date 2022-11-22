@@ -1,0 +1,33 @@
+#! /usr/bin/env ruby
+
+# Universidad Simón Bolívar
+# CI-3725 Traductores e Interpretadores
+# GuardedUSB Etapa 4
+# @author: Albert Díaz     11-10278
+# @author: Moisés González 11-10406
+# @date: DICIEMBRE-2019
+# @file: guardedusb
+
+require './lexer.rb'
+require './parser.rb'
+
+codigo = ""
+filename = ARGV[0]
+
+if !filename
+    exit(1)
+end
+if !filename.match(/.*\.gusb/)
+    puts "Extensión de archivo errónea. Se deben usar archivos .guid"
+    exit(2)
+end
+
+File.open(ARGV[0], "r") do |file|
+    codigo = file.read
+end
+
+l2 = Parser.new
+# l1 = Lexer.new
+program = l2.parse(codigo)
+program.semantic_check
+program.evaluate
